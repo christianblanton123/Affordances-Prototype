@@ -27,28 +27,33 @@ public class Movement : MonoBehaviour
     //Movement
     public float accel;
     public float decel;
-    float moveVelocity;
+    public float moveVelocity;
     bool hasDoubleJumped;
     [Tooltip("True=you can do X consecutive in air jumps, False=you can do X double jumps")]
     public bool allowConsecutiveAerialJumps;
-
+    float normalGravityScale;
+   
     //Collision Audio
     public AudioSource CollisionSFX;
 
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponentInChildren<Rigidbody2D>();
         doubleJumpsLeft = MaxAerialJumps;
         hasDoubleJumped = false;
         CollisionSFX = GameObject.FindGameObjectWithTag("CollisionSFX").GetComponent<AudioSource>();
+        normalGravityScale = rb.gravityScale;
     }
 
     // Update is called once per frame
     void Update()
     {
         RaycastHit2D hitGround;
-        hitGround = Physics2D.Raycast(transform.position, Vector3.down, distance + rb.GetComponent<CircleCollider2D>().radius, mask);
+        if (CompareTag("Circle"))
+            hitGround = Physics2D.Raycast(transform.position, Vector3.down, distance + rb.GetComponent<CircleCollider2D>().radius, mask);
+        else 
+            hitGround = Physics2D.Raycast(transform.position, Vector3.down, distance + rb.GetComponent<BoxCollider2D>().bounds.size.y/2, mask);
         //grounded buffer
         groundedRememberTimer -= Time.deltaTime;
         if (hitGround.collider != null) //hit ground
@@ -61,34 +66,47 @@ public class Movement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
             jumpPressedRememberTimer = jumpPressedRememberTime;
 
-        /*
-        //user can jump more or less depending on how long they press 
-        if (Input.GetKeyUp(KeyCode.Space) && !hasDoubleJumped)
-        {
-            if (rb.velocity.y > 0)
-            {
-                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * cutJumpHeightFactor);
-            }
-        }*/
-
         //Left Right Movement
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+        if (CompareTag("Circle"))
         {
+            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+            {
                 moveVelocity += -accel;
-            if (moveVelocity < -maxSpeed)
-            {
-                moveVelocity = -maxSpeed;
+                if (moveVelocity < -maxSpeed)
+                {
+                    moveVelocity = -maxSpeed;
+                }
             }
-        }
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
-        {
+            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+            {
                 moveVelocity += accel;
-            if (moveVelocity > maxSpeed)
-            {
-                moveVelocity = maxSpeed;
+                if (moveVelocity > maxSpeed)
+                {
+                    moveVelocity = maxSpeed;
+                }
             }
         }
-        else if (!(Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) && !(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))){
+        else if (hitGround.collider == null && CompareTag("Rectangle"))
+        {
+            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+            {
+                moveVelocity += -accel;
+                if (moveVelocity < -maxSpeed)
+                {
+                    moveVelocity = -maxSpeed;
+                }
+            }
+            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+            {
+                moveVelocity += accel;
+                if (moveVelocity > maxSpeed)
+                {
+                    moveVelocity = maxSpeed;
+                }
+            }
+        }
+        
+        if (!(Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) && !(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))||(CompareTag("Rectangle")&&hitGround.collider!=null)){
             if (moveVelocity > 0)
             {
                 moveVelocity = Mathf.Clamp(moveVelocity - decel, 0, moveVelocity - decel);
@@ -98,15 +116,18 @@ public class Movement : MonoBehaviour
                 moveVelocity = Mathf.Clamp(moveVelocity + decel, moveVelocity+decel, 0);
             }
         }
-        GetComponent<Rigidbody2D>().velocity = new Vector2(moveVelocity, GetComponent<Rigidbody2D>().velocity.y);
+        rb.velocity = new Vector2(moveVelocity, rb.velocity.y);
         //jump
         if (groundedRememberTimer > 0 && jumpPressedRememberTimer > 0)
         {
             jumpPressedRememberTimer = 0;
             groundedRememberTimer = 0;
-            
-            float jumpForce = Mathf.Lerp(MinJumpForce,MaxJumpForce,Mathf.Abs(moveVelocity)/maxSpeed);
-            Debug.Log(jumpForce);
+            float jumpForce;
+            if (CompareTag("Circle"))
+            {
+                jumpForce = Mathf.Lerp(MinJumpForce, MaxJumpForce, Mathf.Abs(moveVelocity) / maxSpeed);
+            }
+            else jumpForce = MinJumpForce;
             rb.velocity = new Vector3(rb.velocity.x, jumpForce);
         }
     }
