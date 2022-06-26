@@ -67,8 +67,6 @@ public class Movement : MonoBehaviour
         jumpPressedRememberTimer = jumpPressedRememberTime; }
 
         //Left Right Movement
-        if (CompareTag("Circle"))
-        {
             if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
             {
                 moveVelocity += -accel;
@@ -85,8 +83,7 @@ public class Movement : MonoBehaviour
                     moveVelocity = maxSpeed;
                 }
             }
-        }
-        else if (hitGround.collider == null && CompareTag("Rectangle"))
+        if (hitGround.collider == null && CompareTag("Rectangle"))
         {
             if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
             {

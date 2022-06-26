@@ -131,7 +131,7 @@ MonoBehaviour:
   MinJumpForce: 8
   MaxJumpForce: 15
   MaxAerialJumps: 0
-  maxSpeed: 10
+  maxSpeed: 2
   accel: 1
   decel: 0.5
   moveVelocity: 0
