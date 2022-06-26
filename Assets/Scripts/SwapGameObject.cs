@@ -5,8 +5,8 @@ using UnityEngine;
 public class SwapGameObject : MonoBehaviour
 {
     // Start is called before the first frame update
-    enum State { Circle, Rectangle };
-    State mState;
+    public enum State { Circle, Rectangle };
+    public State mState;
     public GameObject circle;
     public GameObject rectangle;
     void Start()
@@ -31,7 +31,7 @@ public class SwapGameObject : MonoBehaviour
         }
         else
         {
-            if (Input.GetKeyUp(KeyCode.Mouse1))//transition to circle
+            if (Input.GetKeyDown(KeyCode.Mouse1))//transition to circle
             {
                 circle.GetComponent<Movement>().moveVelocity = rectangle.GetComponent<Movement>().moveVelocity;
                 mState = State.Circle;
@@ -40,5 +40,6 @@ public class SwapGameObject : MonoBehaviour
             }
             circle.transform.position = rectangle.transform.position;
         }
+        
     }
 }

@@ -52,8 +52,8 @@ public class Movement : MonoBehaviour
         RaycastHit2D hitGround;
         if (CompareTag("Circle"))
             hitGround = Physics2D.Raycast(transform.position, Vector3.down, distance + rb.GetComponent<CircleCollider2D>().radius, mask);
-        else 
-            hitGround = Physics2D.Raycast(transform.position, Vector3.down, distance + rb.GetComponent<BoxCollider2D>().bounds.size.y/2, mask);
+        else
+            hitGround = Physics2D.Raycast(transform.position, Vector3.down, distance + rb.GetComponent<BoxCollider2D>().bounds.size.y / 2, mask);
         //grounded buffer
         groundedRememberTimer -= Time.deltaTime;
         if (hitGround.collider != null) //hit ground
@@ -63,8 +63,8 @@ public class Movement : MonoBehaviour
         }
         //code for buffering jump
         jumpPressedRememberTimer -= Time.deltaTime;
-        if (Input.GetKeyDown(KeyCode.Space))
-            jumpPressedRememberTimer = jumpPressedRememberTime;
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W)) { 
+        jumpPressedRememberTimer = jumpPressedRememberTime; }
 
         //Left Right Movement
         if (CompareTag("Circle"))
