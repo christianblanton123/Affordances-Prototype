@@ -13,7 +13,7 @@ public class Rotate90 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Q) || Input.GetKeyUp(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             transform.Rotate(new Vector3(0,0,1),90);
         }

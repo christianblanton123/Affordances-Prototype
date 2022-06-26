@@ -34,7 +34,7 @@ public class Movement : MonoBehaviour
     float normalGravityScale;
    
     //Collision Audio
-    public AudioSource CollisionSFX;
+    //public AudioSource CollisionSFX;
 
     // Start is called before the first frame update
     void Start()
@@ -42,7 +42,7 @@ public class Movement : MonoBehaviour
         rb = GetComponentInChildren<Rigidbody2D>();
         doubleJumpsLeft = MaxAerialJumps;
         hasDoubleJumped = false;
-        CollisionSFX = GameObject.FindGameObjectWithTag("CollisionSFX").GetComponent<AudioSource>();
+        //CollisionSFX = GameObject.FindGameObjectWithTag("CollisionSFX").GetComponent<AudioSource>();
         normalGravityScale = rb.gravityScale;
     }
 
@@ -138,7 +138,7 @@ public class Movement : MonoBehaviour
     {
         if (collision.gameObject.tag == "CollisionTag")
         {
-            CollisionSFX.Play();
+            //CollisionSFX.Play();
         }
     }
 

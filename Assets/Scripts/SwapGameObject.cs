@@ -20,7 +20,7 @@ public class SwapGameObject : MonoBehaviour
     {
         if (mState == State.Circle)
         {
-            if (Input.GetKeyUp(KeyCode.W))//transition to rect
+            if (Input.GetKeyDown(KeyCode.Mouse1))//transition to rect
             {
                 rectangle.GetComponent<Movement>().moveVelocity = circle.GetComponent<Movement>().moveVelocity;
                 mState = State.Rectangle;
@@ -31,7 +31,7 @@ public class SwapGameObject : MonoBehaviour
         }
         else
         {
-            if (Input.GetKeyUp(KeyCode.W))//transition to circle
+            if (Input.GetKeyUp(KeyCode.Mouse1))//transition to circle
             {
                 circle.GetComponent<Movement>().moveVelocity = rectangle.GetComponent<Movement>().moveVelocity;
                 mState = State.Circle;
