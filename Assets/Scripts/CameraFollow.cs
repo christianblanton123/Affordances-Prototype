@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CameraFollow : MonoBehaviour
 {
@@ -26,6 +27,10 @@ public class CameraFollow : MonoBehaviour
         x = isCircle ? circle.transform.position.x : rectangle.transform.position.x;
         setY(isCircle);
         gameObject.transform.position = new Vector3(x, y, z);
+        if(y <= -20)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
     void setY(bool isCircle)
     {

@@ -27,4 +27,14 @@ public class Menu : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
+    public void loadGame()
+    {
+        SceneManager.LoadScene("Main Scene", LoadSceneMode.Single);
+        Debug.Log("loading Game");
+    }
+    public void loadCredits()
+    {
+        SceneManager.LoadScene("Credits", LoadSceneMode.Single);
+    }
 }
